@@ -1,5 +1,9 @@
 const _ = require('lodash');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+
+const EXPIRES_IN = 10 * 1000; // 10 sec
+const SECRET = 'YOUR_JWT_SECRET';
 
 async function verifyUser(data) {
     const username = _.get(data, 'username'); // 從 data 取出 username
@@ -30,7 +34,10 @@ function createRouter(dependencies) {
         const data = req.body;
         verifyUser(data)
             .then(user => {
-                res.json(user);
+                const token = jwt.sign(user, SECRET, { expiresIn: EXPIRES_IN });
+                res.json({
+                    token
+                });
             })
             .catch(next);
     });
