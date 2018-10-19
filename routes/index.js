@@ -1,6 +1,8 @@
 var express = require('express');
 const UserRouter = require('./users');
 
+const VerifyJWT = require('../middlewares/VerifyJWT');
+
 /**
  * 
  * @param {object} dependencies
@@ -26,7 +28,8 @@ function createRouter(dependencies) {
     res.send('hi');
   });
 
-  router.post('/api/echo', function (req, res, next) {
+  // 掛入 JWT 驗証
+  router.post('/api/echo', VerifyJWT(), function (req, res, next) {
     const body = req.body;
 
     mongoService.insertEcho(body)
