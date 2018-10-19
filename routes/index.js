@@ -4,11 +4,12 @@ const UserRouter = require('./users');
 /**
  * 
  * @param {object} dependencies
- * @param {MongoService} dependencies.mongoService 
+ * @param {MongoService} dependencies.mongoService
+ * @param authRouter
  */
 function createRouter(dependencies) {
   // Get dependencies
-  const { mongoService } = dependencies;
+  const { mongoService, authRouter } = dependencies;
 
   // Create a router
   var router = express.Router();
@@ -17,6 +18,9 @@ function createRouter(dependencies) {
   router.get('/', function (req, res, next) {
     res.render('index', { title: 'Express' });
   });
+
+  // 將 AuthRouter 掛入 /auth
+  router.use('/api/auth', authRouter);
 
   router.get('/api/sayHi', function (req, res, next) {
     res.send('hi');
