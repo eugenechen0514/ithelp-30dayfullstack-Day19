@@ -31,10 +31,13 @@ function createRouter(dependencies) {
 
     /* POST log */
     router.post('/login', function (req, res, next) {
+        console.log(JSON.stringify(req.cookies));　// 印出 cookies
         const data = req.body;
         verifyUser(data)
             .then(user => {
                 const token = jwt.sign(user, SECRET, { expiresIn: EXPIRES_IN });
+                // res.cookie('token', token, { maxAge: EXPIRES_IN, httpOnly: true, secure: true}); // 本機非 http
+                res.cookie('token', token, { maxAge: EXPIRES_IN, httpOnly: true}); // 回應 client ，把 token 存在名為 token 的 cookie　並設定相關屬性
                 res.json({
                     token
                 });
