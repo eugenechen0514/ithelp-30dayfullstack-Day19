@@ -5,7 +5,7 @@ async function verifyUser(data) {
     const username = _.get(data, 'username'); // 從 data 取出 username
     const password = _.get(data, 'password'); // 從 data 取出 username
 
-    if(username === 'billy' && password === '1234') { // pass
+    if (username === 'billy' && password === '1234') { // pass
         return Promise.resolve({
             username,
             email: 'billy@gmail.com',
@@ -27,7 +27,12 @@ function createRouter(dependencies) {
 
     /* POST log */
     router.post('/login', function (req, res, next) {
-        next(new Error('Not implement'));
+        const data = req.body;
+        verifyUser(data)
+            .then(user => {
+                res.json(user);
+            })
+            .catch(next);
     });
     return router;
 }
